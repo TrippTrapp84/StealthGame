@@ -1,0 +1,28 @@
+{
+    "service": {
+        "prefix": "serverservice",
+        "description": "Creates a matter service",
+        "body": [
+            "import { World } from \"@rbxts/matter\";",
+            "import { ServerParams, ServerService } from \"types/generic\";",
+            "",
+            "export default class ${TM_FILENAME_BASE/(.)/${1:/capitalize}/}Service implements ServerService {",
+            "\t/** @hidden */",
+            "\tpublic onInit(world: World, [state]: ServerParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onStart(world: World, [state]: ServerParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onRender(world: World, [state]: ServerParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onPhysics(world: World, [state]: ServerParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onHeartbeat(world: World, [state]: ServerParams): void {}",
+            "}",
+            ""
+        ]
+    }
+}
