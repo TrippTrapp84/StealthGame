@@ -1,4 +1,4 @@
-import { Component, World } from "@rbxts/matter";
+import { Component, World, useEvent } from "@rbxts/matter";
 import { dependency } from "shared/util/matter/start";
 import { ServerParams, ServerService } from "types/generic";
 import ServerLevelService from "./level";
@@ -16,6 +16,8 @@ export default class ServerPathfindingService implements ServerService {
 
 	public onInit(world: World, [state]: ServerParams): void {
 		this.levelService = dependency(ServerLevelService);
+
+		useEvent();
 	}
 
 	public onStart(world: World, [state]: ServerParams): void {}

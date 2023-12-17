@@ -39,6 +39,8 @@ export class PathInstance {
 			}),
 		);
 
+        this.janitor.Add(() =>)
+
 		return promise;
 	}
 }
