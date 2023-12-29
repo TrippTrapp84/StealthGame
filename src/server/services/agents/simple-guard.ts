@@ -41,9 +41,11 @@ export default class SimpleGuardService implements ServerService {
 			}
 
 			if (pathfind.state === EPathfindingState.Idle) {
-				print("Updating simple guard idle");
 				const node = simpleGuard.node ?? Object.keys(levelNodes)[0];
-				const nextNode = getRand(Object.keys(levelNodes.get(node) ?? new Set<BasePart>()));
+				const nextNodes = levelNodes.get(node) ?? new Set();
+				nextNodes.delete(node);
+				const nextNode = getRand(Object.keys(nextNodes));
+				print("Updating simple guard idle", levelNodes);
 				if (nextNode === undefined) return;
 
 				print("Updating simple guard idle nextNode", nextNode);

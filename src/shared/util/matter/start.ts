@@ -2,15 +2,15 @@ import { Loop, System, World } from "@rbxts/matter";
 import { RunService } from "@rbxts/services";
 import { EServicePriority, ServiceBase } from "types/matter/service";
 
-type Service<P extends unknown[] = unknown[]> = ServiceBase<[world: World, ...P]>;
+type Service<P extends unknown[] = unknown[]> = ServiceBase<[World, ...P]>;
 
 const serviceList = new Map<Constructor, Service>();
 
-export function dependency<T extends ServiceBase<[world: World, ...unknown[]]>>(dep: Constructor<T>): T {
+export function dependency<T extends ServiceBase<[World, ...unknown[]]>>(dep: Constructor<T>): T {
 	return serviceList.get(dep) as never;
 }
 
-export function startMatter<S extends ServiceBase<[world: World, ...P]>, P extends [...args: unknown[]]>(
+export function startMatter<S extends ServiceBase<[World, ...P]>, P extends [...args: unknown[]]>(
 	folder: Folder,
 	...serviceArgs: P
 ): [World, Loop<[World, ...P]>] {
@@ -34,7 +34,6 @@ export function startMatter<S extends ServiceBase<[world: World, ...P]>, P exten
 		if (service.onRender !== undefined) {
 			services.push({
 				system: (...args: Params) => {
-					print("RUNNING SYSTEM", module.Name);
 					service.onRender!(...args);
 				},
 				priority: service.priority ?? EServicePriority.Default,
@@ -45,7 +44,6 @@ export function startMatter<S extends ServiceBase<[world: World, ...P]>, P exten
 		if (service.onPhysics !== undefined) {
 			services.push({
 				system: (...args: Params) => {
-					print("RUNNING SYSTEM", module.Name);
 					service.onPhysics!(...args);
 				},
 				priority: service.priority ?? EServicePriority.Default,
@@ -56,7 +54,6 @@ export function startMatter<S extends ServiceBase<[world: World, ...P]>, P exten
 		if (service.onHeartbeat !== undefined) {
 			services.push({
 				system: (...args: Params) => {
-					print("RUNNING SYSTEM", module.Name);
 					service.onHeartbeat!(...args);
 				},
 				priority: service.priority ?? EServicePriority.Default,

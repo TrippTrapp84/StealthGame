@@ -1,5 +1,5 @@
 {
-    "service": {
+    "serverservice": {
         "prefix": "serverservice",
         "description": "Creates a matter service",
         "body": [
@@ -21,6 +21,32 @@
             "",
             "\t/** @hidden */",
             "\tpublic onHeartbeat(world: World, [state]: ServerParams): void {}",
+            "}",
+            ""
+        ]
+    },
+    "clientservice": {
+        "prefix": "clientservice",
+        "description": "Creates a matter service",
+        "body": [
+            "import { World } from \"@rbxts/matter\";",
+            "import { ClientParams, ClientService } from \"types/generic\";",
+            "",
+            "export default class ${TM_FILENAME_BASE/(.)/${1:/capitalize}/}Service implements ClientService {",
+            "\t/** @hidden */",
+            "\tpublic onInit(world: World, [state]: ClientParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onStart(world: World, [state]: ClientParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onRender(world: World, [state]: ClientParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onPhysics(world: World, [state]: ClientParams): void {}",
+            "",
+            "\t/** @hidden */",
+            "\tpublic onHeartbeat(world: World, [state]: ClientParams): void {}",
             "}",
             ""
         ]

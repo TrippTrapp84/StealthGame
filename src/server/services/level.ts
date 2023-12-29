@@ -28,6 +28,7 @@ export default class ServerLevelService implements ServerService {
 		const nodeGraph = new Map<BasePart, Set<BasePart>>();
 		level.Nodes.GetChildren().forEach((p) => {
 			const connected = nodeGraph.get(p) ?? new Set<BasePart>();
+			nodeGraph.set(p, connected);
 
 			p.GetChildren()
 				.mapFiltered((v) => (v.IsA("WeldConstraint") ? v : undefined))

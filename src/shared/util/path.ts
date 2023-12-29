@@ -23,6 +23,8 @@ export class PathInstance {
 	public async computeAsync(start: Vector3, target: Vector3): Promise<EPathState> {
 		this.janitor.Cleanup();
 
+		this.status = EPathState.Calculating;
+
 		let res: (state: EPathState) => void;
 		const promise = new Promise<EPathState>((resolve) => (res = resolve));
 
@@ -32,15 +34,27 @@ export class PathInstance {
 
 				const status = this.path.Status;
 				if (status === Enum.PathStatus.Success) {
+					this.status = EPathState.ValidPath;
 					res(EPathState.ValidPath);
 				} else {
+					this.status = EPathState.NoPath;
 					res(EPathState.NoPath);
 				}
 			}),
 		);
 
-        this.janitor.Add(() =>)
+		this.janitor.Add(() => {
+			res(EPathState.NoPath);
+		});
 
 		return promise;
+	}
+
+	public getWaypoints(): Array<PathWaypoint> {
+		return this.path.GetWaypoints();
+	}
+
+	public getStatus(): EPathState {
+		return this.status;
 	}
 }

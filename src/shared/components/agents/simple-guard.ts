@@ -10,6 +10,7 @@ import { QueryResult, World } from "@rbxts/matter/lib/World";
 import { makeComponent } from "shared/util/matter/component";
 import { makeQuery } from "shared/util/matter/query";
 import { ComponentCtor } from "@rbxts/matter/lib/component";
+import { PathInstance } from "shared/util/path";
 
 export interface SimpleGuard {
 	lastUpdate: number;
@@ -26,7 +27,7 @@ export function makeSimpleGuard() {
 		humanNPC,
 		AgentPathfinding({
 			state: EPathfindingState.Idle,
-			path: PathfindingService.CreatePath({
+			path: new PathInstance({
 				Costs: { ...PathLabelCosts, ...PathMaterialCosts },
 				AgentHeight: 5,
 				AgentCanJump: false,

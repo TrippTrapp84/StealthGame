@@ -1,5 +1,6 @@
 import { component } from "@rbxts/matter";
 import { makeComponent } from "shared/util/matter/component";
+import { PathInstance } from "shared/util/path";
 
 export const enum EPathfindingState {
 	/**
@@ -28,7 +29,7 @@ export const enum EPathfindingState {
 }
 
 export interface AgentPathfinding {
-	path: Path;
+	path: PathInstance;
 	state: EPathfindingState;
 
 	speed: number;

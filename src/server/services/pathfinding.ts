@@ -8,6 +8,7 @@ import { QueryResult } from "@rbxts/matter/lib/World";
 import { EntityId } from "types/matter/world";
 import { EServicePriority } from "types/matter/service";
 import { SimpleGuard } from "shared/components/agents/simple-guard";
+import { EPathState } from "shared/util/path";
 
 export default class ServerPathfindingService implements ServerService {
 	public priority = EServicePriority.Quaternary;
@@ -16,8 +17,6 @@ export default class ServerPathfindingService implements ServerService {
 
 	public onInit(world: World, [state]: ServerParams): void {
 		this.levelService = dependency(ServerLevelService);
-
-		useEvent();
 	}
 
 	public onStart(world: World, [state]: ServerParams): void {}
@@ -47,6 +46,7 @@ export default class ServerPathfindingService implements ServerService {
 		} else if (pathfind.state === EPathfindingState.Active) {
 			this.updateActive(world, entity, agent, pathfind, dt);
 		} else if (pathfind.state === EPathfindingState.Computing) {
+			this.updateComputing(world, entity, agent, pathfind);
 		}
 	}
 
@@ -57,7 +57,7 @@ export default class ServerPathfindingService implements ServerService {
 		pathfind: Component<AgentPathfinding>,
 		dt: number,
 	): void {
-		const waypoints = pathfind.path.GetWaypoints();
+		const waypoints = pathfind.path.getWaypoints();
 		const current = pathfind.waypoint ?? 0;
 
 		const model = agent.model;
@@ -74,11 +74,13 @@ export default class ServerPathfindingService implements ServerService {
 
 		const offset = waypoint.Position.sub(model.PrimaryPart.Position);
 		if (offset.Magnitude < 0.5) {
-			world.insert(entity, pathfind.patch({ waypoint: current + 1 }));
-			this.updateActive(world, entity, agent, pathfind, dt);
+			const newPathfind = pathfind.patch({ waypoint: current + 1 });
+			world.insert(entity, newPathfind);
+			this.updateActive(world, entity, agent, newPathfind, dt);
 			return;
 		}
 
+		print("Updating active 4");
 		model.PivotTo(
 			CFrame.lookAt(
 				model.PrimaryPart.Position.add(offset.Unit.mul(math.min(dt * pathfind.speed, offset.Magnitude))),
@@ -93,7 +95,7 @@ export default class ServerPathfindingService implements ServerService {
 		agent: Component<Agent>,
 		pathfind: Component<AgentPathfinding>,
 	): void {
-		const waypoints = pathfind.path.GetWaypoints();
+		const waypoints = pathfind.path.getWaypoints();
 		const last = waypoints.pop();
 
 		print("Updating idle", pathfind);
@@ -102,9 +104,21 @@ export default class ServerPathfindingService implements ServerService {
 
 		if (target === undefined || (last && target.Position.sub(last.Position).Magnitude < 0.5)) return;
 
-		task.spawn(() => {
-			pathfind.path.ComputeAsync(agent.model.PrimaryPart.Position, target.Position);
-		});
+		pathfind.path.computeAsync(agent.model.PrimaryPart.Position, target.Position).then((s) => {});
 		world.insert(entity, pathfind.patch({ state: EPathfindingState.Computing, waypoint: 0 }));
+	}
+
+	private updateComputing(
+		world: World,
+		entity: EntityId,
+		agent: Component<Agent>,
+		pathfind: Component<AgentPathfinding>,
+	): void {
+		print("Updating calculating");
+		if (pathfind.path.getStatus() === EPathState.NoPath) {
+			world.insert(entity, pathfind.patch({ state: EPathfindingState.Idle, waypoint: 0 }));
+		} else if (pathfind.path.getStatus() === EPathState.ValidPath) {
+			world.insert(entity, pathfind.patch({ state: EPathfindingState.Active, waypoint: 0 }));
+		}
 	}
 }
