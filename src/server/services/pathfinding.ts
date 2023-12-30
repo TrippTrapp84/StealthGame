@@ -102,7 +102,7 @@ export default class ServerPathfindingService implements ServerService {
 
 		const target = pathfind.target;
 
-		if (target === undefined || (last && target.Position.sub(last.Position).Magnitude < 0.5)) return;
+		if (target === undefined || (last !== undefined && target.Position.sub(last.Position).Magnitude < 0.5)) return;
 
 		pathfind.path.computeAsync(agent.model.PrimaryPart.Position, target.Position).then((s) => {});
 		world.insert(entity, pathfind.patch({ state: EPathfindingState.Computing, waypoint: 0 }));

@@ -30,6 +30,7 @@
     "@rbxts/matter": "^0.6.6",
     "@rbxts/object-utils": "^1.0.4",
     "@rbxts/services": "^1.5.1",
+    "@rbxts/signal": "^1.1.1",
     "roblox-ts": "^2.2.0"
   }
 }

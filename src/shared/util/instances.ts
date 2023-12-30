@@ -12,6 +12,25 @@ const props: InstanceList = {
 		CanQuery: false,
 		CFrame: new CFrame(),
 	},
+
+	AlignPosition: {
+		Mode: Enum.PositionAlignmentMode.OneAttachment,
+		Position: Vector3.zero,
+		ReactionForceEnabled: false,
+		ApplyAtCenterOfMass: true,
+		ForceRelativeTo: Enum.ActuatorRelativeTo.World,
+		Responsiveness: 100,
+		RigidityEnabled: true,
+	},
+
+	AlignOrientation: {
+		Mode: Enum.OrientationAlignmentMode.OneAttachment,
+		CFrame: new CFrame(),
+		ReactionTorqueEnabled: false,
+		AlignType: Enum.AlignType.AllAxes,
+		Responsiveness: 100,
+		RigidityEnabled: true,
+	},
 } as const;
 
 const instances: { [Key in keyof CreatableInstances]?: CreatableInstances[Key] } = {};

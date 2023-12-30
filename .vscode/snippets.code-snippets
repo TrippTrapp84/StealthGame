@@ -1,7 +1,7 @@
 {
     "serverservice": {
         "prefix": "serverservice",
-        "description": "Creates a matter service",
+        "description": "Creates a server matter service",
         "body": [
             "import { World } from \"@rbxts/matter\";",
             "import { ServerParams, ServerService } from \"types/generic\";",
@@ -27,7 +27,7 @@
     },
     "clientservice": {
         "prefix": "clientservice",
-        "description": "Creates a matter service",
+        "description": "Creates a client matter service",
         "body": [
             "import { World } from \"@rbxts/matter\";",
             "import { ClientParams, ClientService } from \"types/generic\";",
