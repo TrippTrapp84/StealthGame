@@ -13,6 +13,7 @@
 	"eslint.format.enable": true,
 	"cSpell.words": [
 		"Blockcast",
+		"flamework",
 		"getmetatable",
 		"pathfind",
 		"Pathfinding",

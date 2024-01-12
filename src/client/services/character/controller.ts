@@ -5,7 +5,6 @@ import { Events } from "client/network";
 import { getVecXZRelativeCamera } from "shared/util/camera";
 import { makePrefab } from "shared/util/prefabs";
 import { ClientParams, ClientService } from "types/generic";
-import { CameraEffectBase } from "../camera copy/effects/camera-effects-base";
 import { ETags, getTagged } from "shared/util/tags";
 import { vector3XZ } from "shared/util/vector";
 import { lineIntersection } from "shared/util/math";
