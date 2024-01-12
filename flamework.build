@@ -5,8 +5,13 @@
 		"stealthgame:out/shared/util/path@PathInstance": "shared/util/path@PathInstance",
 		"stealthgame:out/client/services/level@LevelService": "client/services/level@LevelService",
 		"stealthgame:out/client/services/camera/camera@CameraService": "client/services/camera/camera@CameraService",
+<<<<<<< HEAD
 		"stealthgame:out/client/services/camera/effects/camera-effects-base@CameraEffectBase": "client/services/camera/effects/camera-effects-base@CameraEffectBase",
 		"stealthgame:out/client/services/camera/effects/shake/camera-shake@CameraShakeEffect": "client/services/camera/effects/shake/camera-shake@CameraShakeEffect",
+=======
+		"stealthgame:out/client/services/camera copy/effects/camera-effects-base@CameraEffectBase": "client/services/camera copy/effects/camera-effects-base@CameraEffectBase",
+		"stealthgame:out/client/services/camera copy/effects/shake/camera-shake@CameraShakeEffect": "client/services/camera copy/effects/shake/camera-shake@CameraShakeEffect",
+>>>>>>> 1bce0227c3f81bb837de8b0077a80c8eea117c81
 		"stealthgame:out/client/services/character/controller@CharacterController": "client/services/character/controller@CharacterController",
 		"stealthgame:out/client/services/matter/replication@ReplicationService": "client/services/matter/replication@ReplicationService",
 		"stealthgame:out/server/services/level@ServerLevelService": "server/services/level@ServerLevelService",
