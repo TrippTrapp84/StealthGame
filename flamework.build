@@ -1,0 +1,22 @@
+{
+	"version": 1,
+	"flameworkVersion": "1.0.1",
+	"identifiers": {
+		"stealthgame:out/shared/util/path@PathInstance": "shared/util/path@PathInstance",
+		"stealthgame:out/client/services/level@LevelService": "client/services/level@LevelService",
+		"stealthgame:out/client/services/camera/camera@CameraService": "client/services/camera/camera@CameraService",
+		"stealthgame:out/client/services/camera copy/effects/camera-effects-base@CameraEffectBase": "client/services/camera copy/effects/camera-effects-base@CameraEffectBase",
+		"stealthgame:out/client/services/camera copy/effects/shake/camera-shake@CameraShakeEffect": "client/services/camera copy/effects/shake/camera-shake@CameraShakeEffect",
+		"stealthgame:out/client/services/character/controller@CharacterController": "client/services/character/controller@CharacterController",
+		"stealthgame:out/client/services/matter/replication@ReplicationService": "client/services/matter/replication@ReplicationService",
+		"stealthgame:out/server/services/level@ServerLevelService": "server/services/level@ServerLevelService",
+		"stealthgame:out/server/services/pathfinding@ServerPathfindingService": "server/services/pathfinding@ServerPathfindingService",
+		"stealthgame:out/server/services/agents/simple-guard@SimpleGuardService": "server/services/agents/simple-guard@SimpleGuardService",
+		"stealthgame:out/server/services/core/state@StateService": "server/services/core/state@StateService",
+		"stealthgame:out/server/services/matter/cleanup@CleanupService": "server/services/matter/cleanup@CleanupService",
+		"stealthgame:out/server/services/matter/replication@ServerReplicationService": "server/services/matter/replication@ServerReplicationService",
+		"stealthgame:out/shared/network/network@GlobalEvents": "shared/network/network@GlobalEvents",
+		"stealthgame:out/shared/network/network@GlobalFunctions": "shared/network/network@GlobalFunctions"
+	},
+	"metadata": {}
+}

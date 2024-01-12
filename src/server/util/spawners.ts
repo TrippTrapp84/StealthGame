@@ -1,4 +1,4 @@
-import { World, useEvent } from "@rbxts/matter";
+import { None, World, useEvent } from "@rbxts/matter";
 import { Players } from "@rbxts/services";
 import { Events } from "server/network";
 import { makeSimpleGuard } from "shared/components/agents/simple-guard";
@@ -21,6 +21,6 @@ export const Spawners = {
 
 	[ESpawners.Players]: (world: World, spawner: Part) => {
 		Events.characterSpawned.broadcast();
-		return world.spawn(PlayerCharacter({ id: `PlayerCharacter_${Players.GetPlayers()[0].UserId}` }));
+		return world.spawn(PlayerCharacter({ id: `PlayerCharacter_${Players.GetPlayers()[0].UserId}`, owner: None }));
 	},
 } satisfies Record<ESpawners, (world: World, spawner: Part) => EntityId>;
