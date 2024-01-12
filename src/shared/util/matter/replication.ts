@@ -1,9 +1,14 @@
-import { Component, component } from "@rbxts/matter";
+import { Component, None, component } from "@rbxts/matter";
 import { makeComponent } from "./component";
 
-export const ReplicatedComponents = new Set<() => Component<object>>();
+interface ReplicatedBase {
+	id: string;
+	owner: None | UserId;
+}
 
-export function makeReplicatedComponent<T extends object = object>(
+export const ReplicatedComponents = new Set<() => Component<ReplicatedBase>>();
+
+export function makeReplicatedComponent<T extends ReplicatedBase = ReplicatedBase>(
 	name?: string,
 	defaultData?: T,
 	cleanup?: (comp: Component<T>) => void,

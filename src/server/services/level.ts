@@ -3,7 +3,7 @@ import { AnyEntity, Component, Entity, World } from "@rbxts/matter";
 import { ServerStorage, Workspace } from "@rbxts/services";
 import { makeAgent } from "shared/components/base/agent";
 import { WorldEntity } from "shared/components/base/world-entity";
-import { Spawners } from "shared/util/spawners";
+import { Spawners } from "server/util/spawners";
 import { ELevels } from "types/enums/levels";
 import { ServerParams, ServerService } from "types/generic";
 import { ILevelData } from "types/interfaces/level";

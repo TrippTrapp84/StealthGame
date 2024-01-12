@@ -9,6 +9,23 @@ const prefabs = {
 
 		return model as Model & { PrimaryPart: typeof part };
 	}),
+	PlayerCharacter: compute(() => {
+		const model = makeInstance("Model");
+
+		const part = makeInstance("Part", model);
+		model.PrimaryPart = part;
+
+		const hitbox = makeInstance("Part", model);
+		hitbox.Name = "Hitbox";
+		hitbox.Shape = Enum.PartType.Cylinder;
+		hitbox.CFrame = CFrame.fromMatrix(new Vector3(), Vector3.yAxis, Vector3.xAxis.mul(-1), Vector3.zAxis);
+		hitbox.Size = new Vector3(4, 2, 2);
+
+		return model as Model & {
+			PrimaryPart: typeof part;
+			Hitbox: typeof hitbox;
+		};
+	}),
 	Character: compute(() => {
 		const model = makeInstance("Model");
 		const part = makeInstance("Part", model);
@@ -28,7 +45,7 @@ const prefabs = {
 			Attachment0: typeof attachment;
 		};
 	}),
-} as const;
+} satisfies Record<string, Instance>;
 
 type Prefabs = typeof prefabs;
 

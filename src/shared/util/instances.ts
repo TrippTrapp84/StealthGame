@@ -9,6 +9,7 @@ const props: InstanceList = {
 		CanCollide: false,
 		Transparency: 1,
 		CanTouch: false,
+		Massless: true,
 		CanQuery: false,
 		CFrame: new CFrame(),
 	},

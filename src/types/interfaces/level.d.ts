@@ -1,4 +1,4 @@
-import { ESpawners } from "shared/util/spawners";
+import { ESpawners } from "server/util/spawners";
 import { ELevels } from "types/enums/levels";
 
 export interface ILevelData extends Folder {
