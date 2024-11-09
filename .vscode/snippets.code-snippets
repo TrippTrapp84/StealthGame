@@ -50,5 +50,15 @@
             "}",
             ""
         ]
+    },
+
+    "spawnerFunction": {
+        "prefix": "spawner",
+        "description": "fill in the callback function for a spawner",
+        "body": [
+            "(world: World, spawner: Part) => {",
+                "return world.spawn();",
+            "}"
+        ]
     }
 }

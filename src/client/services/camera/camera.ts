@@ -1,13 +1,16 @@
 import { Janitor } from "@rbxts/janitor";
 import Object from "@rbxts/object-utils";
 import { Workspace, HttpService, UserInputService, RunService, Players } from "@rbxts/services";
-import { ClientParams, ClientService } from "types/generic";
 import { ILevelData } from "types/interfaces/level";
 import Signal from "@rbxts/signal";
 import { ECameraEffects } from "types/enums/camera-effects";
 import { ECameraTransitions } from "types/enums/camera-transition";
 import { ECameraTypes } from "types/enums/camera-types";
 import { World, useDeltaTime } from "@rbxts/matter";
+import { ClientParams, ClientService } from "types/generic";
+import { makePrefab } from "shared/util/prefabs";
+
+const DEG_89 = math.rad(89);
 
 type EffectCallback = (
 	cf: CFrame,
@@ -16,13 +19,15 @@ type EffectCallback = (
 	isDFov: boolean,
 ) => [cf: CFrame, fov?: number, dfov?: number];
 type EffectStack = Array<CameraEffectData & { id: string }>;
+
+type Character = ReturnType<typeof makePrefab<"PlayerCharacter">>;
 export interface CameraEffectData {
 	effect: EffectCallback;
 	onRemoved?: () => void;
 	type: ECameraEffects;
 }
 
-export default class CameraService extends ClientService {
+export default class CameraController implements ClientService {
 	private currentState = ECameraTypes.Custom;
 	private camera = Workspace.CurrentCamera!;
 	private cameraCF = this.camera.CFrame;
@@ -62,14 +67,13 @@ export default class CameraService extends ClientService {
 
 	/** @hidden */
 	public onInit(): void {
-		UserInputService.InputBegan.Connect((input) => {
-			if (input.UserInputType === Enum.UserInputType.MouseWheel) {
-				this.controls.zoom.value += input.Position.Z;
-				this.controls.zoom.signal.Fire(this.controls.zoom.value);
-			}
-		});
-
-		// UserInputService.TouchPinch.Connect()
+		// UserInputService.InputBegan.Connect((input) => {
+		// 	if (input.UserInputType === Enum.UserInputType.MouseWheel) {
+		// 		this.controls.zoom.value += input.Position.Z;
+		// 		this.controls.zoom.signal.Fire(this.controls.zoom.value);
+		// 	} else if (input.UserInputType === Enum.UserInputType.MouseMovement) {
+		// 	}
+		// });
 	}
 
 	/** @hidden */
@@ -141,8 +145,6 @@ export default class CameraService extends ClientService {
 			this.janitor.Cleanup();
 			this.stop();
 		}
-
-		print("CAMERA STATE CHANGED", cameraState, debug.traceback());
 
 		if (cameraState === ECameraTypes.Default) {
 			this.shouldCameraUpdate = false;
@@ -312,7 +314,7 @@ export default class CameraService extends ClientService {
 					obscuredResolve();
 				}
 
-				// CameraEvents.transitionProgressChanged.Fire(current - start / duration);
+				// CameraEvents.transitionProgressChanged.Fire((current - start) / duration);
 			}),
 		);
 
@@ -373,6 +375,32 @@ export default class CameraService extends ClientService {
 		this.coreEffect(effect);
 
 		return this;
+	}
+
+	public setFirstPerson(character: Character) {
+		this.janitor.Add(
+			UserInputService.InputChanged.Connect((input) => {
+				if (input.UserInputType === Enum.UserInputType.MouseMovement) {
+					const { pan, pitch } = this.controls;
+
+					pan.value -= input.Delta.X / 150;
+					pitch.value = math.clamp(pitch.value - input.Delta.Y / 150, -DEG_89, DEG_89);
+				}
+			}),
+		);
+		this.coreEffect((_cf, _dt, fov) => {
+			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter;
+
+			const { pan, pitch } = this.controls;
+
+			const newCF = CFrame.fromEulerAnglesYXZ(pitch.value, pan.value, 0).add(
+				character.GetPivot().Position.add(Vector3.yAxis.mul(character.Hitbox.Size.X / 2 - 0.5)),
+			);
+
+			// const debugThirdPersonCF = newCF.add(newCF.VectorToWorldSpace(Vector3.zAxis.mul(10)));
+
+			return [newCF, fov];
+		});
 	}
 
 	public getState(): ECameraTypes {

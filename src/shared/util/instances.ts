@@ -32,6 +32,32 @@ const props: InstanceList = {
 		Responsiveness: 100,
 		RigidityEnabled: true,
 	},
+	CornerWedgePart: {
+		Size: Vector3.one,
+		Anchored: true,
+		CanCollide: false,
+		Transparency: 1,
+		CanTouch: false,
+		Massless: true,
+		CanQuery: false,
+		CFrame: new CFrame(),
+	},
+	PointLight: {
+		Brightness: 0,
+		Range: 0,
+		Shadows: false,
+		Color: new Color3(1, 1, 1),
+		Enabled: true,
+	},
+	SpotLight: {
+		Brightness: 0,
+		Range: 0,
+		Angle: 0,
+		Shadows: false,
+		Color: new Color3(1, 1, 1),
+		Enabled: true,
+		Face: Enum.NormalId.Front,
+	},
 } as const;
 
 const instances: { [Key in keyof CreatableInstances]?: CreatableInstances[Key] } = {};
@@ -53,6 +79,11 @@ export function makeInstance<I extends keyof CreatableInstances, P extends Insta
 export function makeInstance<I extends keyof CreatableInstances>(
 	name: I,
 ): CreatableInstances[I] & { Parent: undefined };
+
+export function makeInstance<I extends keyof CreatableInstances>(
+	name: I,
+	parent?: Instance,
+): CreatableInstances[I] & { Parent: typeof parent };
 
 export function makeInstance<I extends keyof CreatableInstances, P extends Instance>(
 	name: I,

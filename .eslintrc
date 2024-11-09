@@ -23,6 +23,9 @@
 	],
 	"rules": {
 		"prettier/prettier": "warn",
-		"no-constant-condition": "off"
+		"no-constant-condition": "off",
+		"prefer-const": ["error",{
+			"destructuring": "all"
+		}]
 	}
 }

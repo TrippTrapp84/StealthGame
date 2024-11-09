@@ -15,10 +15,14 @@
 		"Blockcast",
 		"flamework",
 		"getmetatable",
+		"Lerp",
+		"noob",
 		"pathfind",
 		"Pathfinding",
 		"rbxassetid",
 		"rbxts",
-		"Roblox"
+		"Roblox",
+		"screengui",
+		"uncrouch"
 	]
 }

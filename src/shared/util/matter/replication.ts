@@ -13,7 +13,7 @@ export function makeReplicatedComponent<T extends ReplicatedBase = ReplicatedBas
 	defaultData?: T,
 	cleanup?: (comp: Component<T>) => void,
 ): ReturnType<typeof component<T>> {
-	const comp = makeComponent(name, defaultData, cleanup);
+	const comp = makeComponent(name, defaultData as never, cleanup) as never;
 
 	ReplicatedComponents.add(comp);
 

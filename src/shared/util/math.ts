@@ -1,3 +1,6 @@
+/** Didn't seem to work
+ * @deprecated
+ */
 export function lineIntersection(startA: Vector3, endA: Vector3, startB: Vector3, endB: Vector3): Vector3 {
 	const point_1_x1 = startA.X;
 	const point_1_y1 = startA.Z;

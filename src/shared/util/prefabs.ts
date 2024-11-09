@@ -19,7 +19,7 @@ const prefabs = {
 		hitbox.Name = "Hitbox";
 		hitbox.Shape = Enum.PartType.Cylinder;
 		hitbox.CFrame = CFrame.fromMatrix(new Vector3(), Vector3.yAxis, Vector3.xAxis.mul(-1), Vector3.zAxis);
-		hitbox.Size = new Vector3(4, 2, 2);
+		hitbox.Size = new Vector3(8, 2, 2);
 
 		return model as Model & {
 			PrimaryPart: typeof part;
@@ -31,18 +31,21 @@ const prefabs = {
 		const part = makeInstance("Part", model);
 		model.PrimaryPart = part;
 
+		part.Size = new Vector3(2, 10, 2);
+		part.Transparency = 0;
+
 		const attachment = makeInstance("Attachment", part);
-		attachment.Name = "Attachment0";
-		const position = makeInstance("AlignPosition", model);
-		position.Name = "CharacterPosition";
-		const orientation = makeInstance("AlignOrientation", model);
-		orientation.Name = "CharacterOrientation";
+		attachment.Name = "CenterAttachment";
+		// const position = makeInstance("AlignPosition", model);
+		// position.Name = "CharacterPosition";
+		// const orientation = makeInstance("AlignOrientation", model);
+		// orientation.Name = "CharacterOrientation";
 
 		return model as Model & {
 			PrimaryPart: typeof part;
-			CharacterPosition: typeof position;
-			CharacterOrientation: typeof orientation;
-			Attachment0: typeof attachment;
+			// CharacterPosition: typeof position;
+			// CharacterOrientation: typeof orientation;
+			CenterAttachment: typeof attachment;
 		};
 	}),
 } satisfies Record<string, Instance>;
@@ -50,7 +53,7 @@ const prefabs = {
 type Prefabs = typeof prefabs;
 
 export function makePrefab<T extends keyof Prefabs, P extends Instance>(name: T, parent: P): Prefabs[T] & { Parent: P };
-export function makePrefab<T extends keyof Prefabs>(name: T): Prefabs[T] & { Parent: undefined };
+export function makePrefab<T extends keyof Prefabs>(name: T): Prefabs[T] & { Parent?: Instance };
 
 export function makePrefab<T extends keyof Prefabs, P extends Instance>(name: T, parent?: P): Prefabs[T] {
 	const prefab = prefabs[name].Clone();

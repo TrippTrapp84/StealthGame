@@ -1,5 +1,6 @@
-import { World } from "@rbxts/matter";
+import { None, World } from "@rbxts/matter";
 import { Events } from "client/network";
+import { localPlayer } from "client/util/player";
 import { ReplicatedComponents } from "shared/util/matter/replication";
 import { ClientParams, ClientService } from "types/generic";
 
@@ -29,7 +30,16 @@ export default class ReplicationService implements ClientService {
 	/** @hidden */
 	public onRender(world: World, [state]: ClientParams): void {
 		for (const repComp of ReplicatedComponents) {
+			for (const [entity, { new: comp, old: oldComp }] of world.queryChanged(repComp)) {
+				if (comp === undefined) continue;
+				if (oldComp === undefined) continue;
+				if (comp.owner !== localPlayer.UserId) continue;
+
+				Events.replicationChanged.fire(comp.id, comp);
+			}
 			for (const [entity, comp] of world.query(repComp)) {
+				if (comp.owner === localPlayer.UserId) continue;
+
 				if (!this.queue.has(comp.id)) continue;
 
 				world.insert(entity, comp.patch(this.data.get(comp.id) as never));

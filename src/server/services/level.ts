@@ -7,17 +7,29 @@ import { Spawners } from "server/util/spawners";
 import { ELevels } from "types/enums/levels";
 import { ServerParams, ServerService } from "types/generic";
 import { ILevelData } from "types/interfaces/level";
+import { Events } from "server/network";
+import { getRand } from "shared/util/array";
+import Object from "@rbxts/object-utils";
+import { ETags, getTagged } from "shared/util/tags";
 
 export default class ServerLevelService implements ServerService {
 	private level?: {
 		instance: ILevelData;
 		nodes: Map<BasePart, Set<BasePart>>;
+
+		usedNodes: Set<BasePart>;
 	};
 
 	public readonly levelJanitor = new Janitor();
 
 	/** @hidden */
-	public onInit(world: World, [state]: ServerParams): void {}
+	public onInit(world: World, [state]: ServerParams): void {
+		for (const level of getTagged(ETags.LevelFolder)) {
+			if (level.Parent?.IsDescendantOf(ServerStorage)) continue;
+
+			level.Destroy();
+		}
+	}
 
 	/** @hidden */
 	public onStart(world: World, [state]: ServerParams): void {}
@@ -35,19 +47,26 @@ export default class ServerLevelService implements ServerService {
 				.forEach((w) => {
 					if (!w.Enabled) return;
 
-					const part = w.Part0 === p ? w.Part1 : w.Part0;
-					if (part === undefined) return;
-					if (part === p) return;
+					const otherPart = w.Part0 === p ? w.Part1 : w.Part0;
+					if (otherPart === undefined) return;
+					if (otherPart === p) return;
 
-					connected.add(part);
+					if (w.GetAttribute("IsOneWay") === true) {
+						const partGraph = nodeGraph.get(w.Part0!) ?? new Set<BasePart>();
+						partGraph.add(w.Part1!);
+						nodeGraph.set(w.Part0!, partGraph);
+					} else {
+						connected.add(otherPart);
 
-					const partGraph = nodeGraph.get(part) ?? new Set<BasePart>();
-					partGraph.add(p);
-					nodeGraph.set(part, partGraph);
+						const partGraph = nodeGraph.get(otherPart) ?? new Set<BasePart>();
+						partGraph.add(p);
+						nodeGraph.set(otherPart, partGraph);
+					}
 				});
 		});
+		print(nodeGraph);
 
-		this.level = { instance: level, nodes: nodeGraph };
+		this.level = { instance: level, nodes: nodeGraph, usedNodes: new Set() };
 		level.Parent = Workspace;
 
 		level.Spawns.GetChildren().forEach((s) => {
@@ -55,12 +74,72 @@ export default class ServerLevelService implements ServerService {
 			const rate = s.GetAttribute("rate") ?? 0;
 			const delay = s.GetAttribute("delay") ?? 0;
 
-			if (delay > 0) task.wait(delay);
+			const spawner = Spawners[spawnType];
+			if (spawner === undefined) return;
 
-			Spawners[spawnType](world, s);
+			task.spawn(() => {
+				if (delay > 0) {
+					task.wait(delay);
+				}
+
+				spawner(world, s);
+
+				if (rate > 0) {
+					while (task.wait(rate) !== undefined) {
+						spawner(world, s);
+					}
+				}
+			});
 		});
 
+		Events.levelLoaded.broadcast(level);
+
 		return level;
+	}
+
+	public useNode(node: BasePart): boolean {
+		const level = this.level;
+		if (level === undefined) return false;
+		if (level.usedNodes.has(node)) return false;
+
+		level.usedNodes.add(node);
+		return true;
+	}
+
+	public releaseNode(node: BasePart): void {
+		const level = this.level;
+		if (level === undefined) return;
+
+		level.usedNodes.delete(node);
+	}
+
+	public getAvailableConnectedNode(node: BasePart): Result<BasePart> {
+		const level = this.level;
+		if (level === undefined) return [false, undefined];
+
+		const connectedNodes = level.nodes.get(node);
+		if (connectedNodes === undefined) return [false, undefined];
+
+		const availableNodes = Object.copy(connectedNodes);
+		for (const used of level.usedNodes) availableNodes.delete(used);
+
+		const nextNode = getRand(Object.keys(availableNodes));
+		if (nextNode === undefined) return [false, undefined];
+
+		return [true, nextNode];
+	}
+
+	public getAvailableNode(): Result<BasePart> {
+		const level = this.level;
+		if (level === undefined) return [false, undefined];
+
+		const nodes = Object.keys(level.nodes);
+		for (const used of level.usedNodes) nodes.unorderedRemove(nodes.indexOf(used));
+
+		const nextNode = getRand(nodes);
+		if (nextNode === undefined) return [false, undefined];
+
+		return [true, nextNode];
 	}
 
 	public getLevel(): typeof this.level {

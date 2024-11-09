@@ -15,14 +15,14 @@ export const enum EServicePriority {
 	/** Reserved for most intermediate or middleware systems designed to process inputs at the beginning of frames */
 	First = 0,
 
-	Primary = 10,
-	Secondary = 20,
-	Tertiary = 30,
-	Quaternary = 40,
+	Primary = 100,
+	Secondary = 200,
+	Tertiary = 300,
+	Quaternary = 400,
 
 	/** The default priority when a priority is not specified. Runs second to last, only before `EServicePriority.Last` */
-	Default = 50,
+	Default = 500,
 
 	/** Reserved for most outbound systems such as replication. It's not recommended to use this */
-	Last = 60,
+	Last = 600,
 }

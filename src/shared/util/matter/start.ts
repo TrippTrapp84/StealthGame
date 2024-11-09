@@ -6,6 +6,15 @@ type Service<P extends unknown[] = unknown[]> = ServiceBase<[World, ...P]>;
 
 const serviceList = new Map<Constructor, Service>();
 
+const worldStorage = {
+	world: undefined as never as World,
+};
+
+export function useWorld(): World {
+	if (worldStorage.world === undefined) warn("useWorld was called before world was initialized");
+	return worldStorage.world;
+}
+
 export function dependency<T extends ServiceBase<[World, ...unknown[]]>>(dep: Constructor<T>): T {
 	return serviceList.get(dep) as never;
 }
@@ -22,11 +31,14 @@ export function startMatter<S extends ServiceBase<[World, ...P]>, P extends [...
 	const serviceStarts = new Array<() => void>();
 
 	const world = new World();
+	worldStorage.world = world;
 
 	for (const module of folder.GetDescendants()) {
 		if (!module.IsA("ModuleScript")) continue;
 
-		const { default: object } = require(module) as { default: Constructor<S> };
+		const { default: object } = require(module) as { default?: Constructor<S> };
+
+		if (object === undefined) continue;
 
 		const service = new object();
 		serviceList.set(object, service);

@@ -1,4 +1,4 @@
-import { ESpawners } from "server/util/spawners";
+import type { ESpawners } from "types/enums/spawners";
 import { ELevels } from "types/enums/levels";
 
 export interface ILevelData extends Folder {
@@ -11,6 +11,14 @@ export interface ILevelData extends Folder {
 				GetAttribute(att: "rate"): number | undefined;
 				GetAttribute(att: "delay"): number | undefined;
 			}
+		>;
+	} & Folder;
+
+	Lights: {
+		GetChildren(): Array<
+			{
+				FindFirstChildWhichIsA(className: "Light"): Light;
+			} & BasePart
 		>;
 	} & Folder;
 

@@ -8,6 +8,6 @@ export interface WorldEntity {
 
 export const WorldEntity = makeComponent<WorldEntity>("Entity");
 
-export function makeWorldEntity() {
-	return [WorldEntity({ root: makeInstance("Part") })] as const;
+export function makeWorldEntity(parent?: Instance) {
+	return [WorldEntity({ root: makeInstance("Part", parent) })] as const;
 }

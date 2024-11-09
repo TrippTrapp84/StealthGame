@@ -7,5 +7,8 @@ import { vector3XZ } from "./vector";
 export function getVecXZRelativeCamera(vec: Vector3): Vector3 {
 	const camCF = Workspace.CurrentCamera!.CFrame;
 
-	return vector3XZ(camCF.VectorToWorldSpace(vec)).Unit;
+	const res = vector3XZ(camCF.VectorToWorldSpace(vec));
+	if (res.Magnitude === 0) return Vector3.zero;
+
+	return res.Unit;
 }

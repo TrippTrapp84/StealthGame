@@ -16,7 +16,20 @@
 		"stealthgame:out/server/services/matter/cleanup@CleanupService": "server/services/matter/cleanup@CleanupService",
 		"stealthgame:out/server/services/matter/replication@ServerReplicationService": "server/services/matter/replication@ServerReplicationService",
 		"stealthgame:out/shared/network/network@GlobalEvents": "shared/network/network@GlobalEvents",
-		"stealthgame:out/shared/network/network@GlobalFunctions": "shared/network/network@GlobalFunctions"
+		"stealthgame:out/shared/network/network@GlobalFunctions": "shared/network/network@GlobalFunctions",
+		"stealthgame:out/client/services/camera/camera@CameraController": "client/services/camera/camera@CameraController",
+		"stealthgame:out/client/services/ui/main-menu@MainMenuService": "client/services/ui/main-menu@MainMenuService",
+		"stealthgame:out/client/services/ui/init@IndexService": "client/services/ui/init@IndexService",
+		"stealthgame:out/client/services/ui/init@UIService": "client/services/ui/init@UIService",
+		"stealthgame:out/client/services/level@ClientLevelService": "client/services/level@ClientLevelService",
+		"stealthgame:out/client/services/detection@DetectionService": "client/services/detection@DetectionService",
+		"stealthgame:out/client/services/debug/light-debug@LightDebugService": "client/services/debug/light-debug@LightDebugService",
+		"stealthgame:out/client/services/someservice@SomeserviceService": "client/services/someservice@SomeserviceService",
+		"stealthgame:out/client/services/someservice@SomeServiceService": "client/services/someservice@SomeServiceService",
+		"stealthgame:out/client/services/character/character-controller@CharacterController": "client/services/character/character-controller@CharacterController",
+		"stealthgame:out/client/services/npc@NpcService": "client/services/npc@NpcService",
+		"stealthgame:out/server/services/assets@AssetsService": "server/services/assets@AssetsService",
+		"stealthgame:out/client/services/npc@NPCService": "client/services/npc@NPCService"
 	},
 	"metadata": {}
 }

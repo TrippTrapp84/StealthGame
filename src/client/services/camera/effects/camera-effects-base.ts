@@ -1,5 +1,5 @@
 import { dependency } from "shared/util/matter/start";
-import CameraService from "client/services/camera/camera";
+import CameraController from "client/services/camera/camera";
 import { ECameraEffects } from "types/enums/camera-effects";
 import { ECameraTypes } from "types/enums/camera-types";
 
@@ -11,7 +11,7 @@ export abstract class CameraEffectBase {
 
 	protected constructor() {
 		task.defer(() => {
-			const cameraController = dependency(CameraService);
+			const cameraController = dependency(CameraController);
 
 			const state = cameraController.getState();
 			if (!this.cameraStates.includes(state)) {
@@ -36,7 +36,7 @@ export abstract class CameraEffectBase {
 	public onRemoved(): void {}
 
 	protected remove(): void {
-		dependency(CameraService).removeEffect(this.id);
+		dependency(CameraController).removeEffect(this.id);
 	}
 }
 
